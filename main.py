@@ -58,22 +58,14 @@ def middleware():
         else:
             return {"mensake":"permiso denegado}"}, 401
 
-<<<<<<< HEAD
 
-=======
->>>>>>> main
 def transformarUrl(urlCliente):
     listaPalabra = urlCliente.split("/")
     for palabra in listaPalabra:
        if re.search("\\d",palabra):
         urlCliente=urlCliente.replace(palabra, "?")
     return urlCliente
-<<<<<<< HEAD
 
-
-
-=======
->>>>>>> main
 @app.route("/login", methods=['POST'])
 def validarUsuario():
     url= dataConfig['url-backend-registraduriasecurity']+"/usuariovalidar-usuario"
@@ -180,10 +172,8 @@ def eliminarPermiso(idPermiso):
     return response.json()
 #fin permiso
 ##############################################
-<<<<<<< HEAD
-# inicio permisorol
-=======
 
+# inicio permisorol
 
 #Rutas Rol
 @app.route("/roles", methods=['GET'])
@@ -223,7 +213,7 @@ def delete(id):
     return response.json()
 ##############################################
 # permiso rol
->>>>>>> main
+
 @app.route("/permiso-rol/rol/{id_rol}/permiso/{id_permiso}", methods=['POST'])
 def crearPermisoRol(id_rol,id_permiso):
     url = dataConfig['url-backend-registraduriasecurity'] + "/permiso-rol/rol/" + id_rol +"/permiso/" + id_permiso
@@ -341,9 +331,9 @@ def eliminarPartido(id):
     return response.json()
 #Fin rutas Partido
 #=================================================================
-<<<<<<< HEAD
 
-=======
+
+
 #rutas resultado
 @app.route("/resultado",methods=['GET'])
 def listaResultado():
@@ -383,7 +373,7 @@ def eliminarResultado(id):
     return response.json()
 #Fin rutas Resultado
 
->>>>>>> main
+
 #inicio rutas Mesa
 
 @app.route("/mesa",methods=['GET'])
