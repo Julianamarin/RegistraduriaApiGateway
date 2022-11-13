@@ -25,67 +25,71 @@ jwt = JWTManager(app)
 def middleware():
     print("Entro al middleware!!")
     urlCliente = request.path
-    metodoCliente=request.method
+    metodoCliente = request.method
 
-    if(urlCliente=="/login"):
+    if (urlCliente == "/login"):
         print("la url es /login, no valido")
         pass
     else:
         print("aqui se valida token")
         verify_jwt_in_request()
-        #para validar los rol
-        infoToken= get_jwt_identity()
-        idRol=infoToken["rol"]["_id"]
+        # para validar los rol
+        infoToken = get_jwt_identity()
+        idRol = infoToken["rol"]["_id"]
 
         #  cambia numeros de la url por ?
-        urlCliente =transformarUrl(urlCliente)
-        
-        urlValidarPermiso=dataConfig['url-backend-security']+"permiso-rol/validar-permiso/rol/"+idRol
+        urlCliente = transformarUrl(urlCliente)
+
+        urlValidarPermiso = dataConfig['url-backend-registraduriasecurity'] + "/permiso-rol/validar-permiso/rol/" + idRol
         headers = {"Content-Type": "application/json"}
 
         bodyRequest = {
-            "url":urlCliente,
-            "metodo":metodoCliente
+            "url": dataConfig['url-backend-registraduriasecurity'] + urlCliente,
+            "metodo": metodoCliente
         }
-        responseValidarPermiso=requests.get(urlValidarPermiso, json=bodyRequest, headers=headers)
+        print(bodyRequest)
+        responseValidarPermiso = requests.get(urlValidarPermiso, json=bodyRequest, headers=headers)
         print("status code del servicio validar permiso", responseValidarPermiso)
 
-        if(responseValidarPermiso.status_code==200):
+        if (responseValidarPermiso.status_code == 200):
             print("el cliente si tiene permisos")
             pass
         else:
-            return {"mensake":"permiso denegado}"}, 401
+            return {"mensake": "permiso denegado}"}, 401
+
 
 def transformarUrl(urlCliente):
     listaPalabra = urlCliente.split("/")
     for palabra in listaPalabra:
-       if re.search("\\d",palabra):
-        urlCliente=urlCliente.replace(palabra, "?")
+        if re.search("\\d", palabra):
+            urlCliente = urlCliente.replace(palabra, "?")
     return urlCliente
+
+
 @app.route("/login", methods=['POST'])
 def validarUsuario():
-    url= dataConfig['url-backend-registraduriasecurity']+"/usuariovalidar-usuario"
+    url = dataConfig['url-backend-registraduriasecurity'] + "/usuario/validar-usuario"
 
-    headers={ "Content-Type":"application/json" }
-    bodyRequest= request.get_json()
+    headers = {"Content-Type": "application/json"}
+    bodyRequest = request.get_json()
     response = requests.post(url, json=bodyRequest, headers=headers)
 
-    if(response.status_code==200):
+    if (response.status_code == 200):
         print("el usuario se valido correctamente")
-        infoUsuario= response.json()
+        infoUsuario = response.json()
 
-        tiempoToken= datetime.timedelta(seconds=60*60)
-        newToken = create_access_token(identity=infoUsuario, expire_delta=tiempoToken)
+        tiempoToken = datetime.timedelta(seconds=60 * 60*24)
+        newToken = create_access_token(identity=infoUsuario, expires_delta=tiempoToken)
 
-        return {"token":newToken}
+        return {"token": newToken}
     else:
         print("error en validacion usuario")
-        return {"mensaje":"usuario y contraseña errados"}, 401
+        return {"mensaje": "usuario y contraseña errados"}, 401
 
 
 @app.route("/usuario", methods=['GET'])
 def listarUsuarios():
-    url = dataConfig['url-backend-registraduriasecurity'] + "/usuario"
+    url = dataConfig["url-backend-registraduriasecurity"] + "/usuario"
     headers = {"Content-Type": "application/json"}
     response = requests.get(url, headers=headers)
     return response.json()
