@@ -12,6 +12,7 @@ from waitress import serve
 import json
 import datetime
 import requests
+import re
 
 app=Flask(__name__)
 cors=CORS(app)
@@ -35,10 +36,12 @@ def middleware():
         #para validar los rol
         infoToken= get_jwt_identity()
         idRol=infoToken["rol"]["_id"]
+        #  cambia los numeros del url por ?
+        urlCliente = transformarUrl(urlCliente)
 
         urlValidarPermiso=dataConfig['url-backend-security']+"permiso-rol/validar-permiso/rol/"+idRol
         headers = {"Content-Type": "application/json"}
-        #pendiaente cambiar el url por ?
+
         bodyRequest = {
             "url":urlCliente,
             "metodo":metodoCliente
@@ -51,6 +54,15 @@ def middleware():
             pass
         else:
             return {"mensake":"permiso denegado}"}, 401
+
+
+def transformarUrl(urlCliente):
+    listaPalabra = urlCliente.split("/")
+    for palabra in listaPalabra:
+       if re.search("\\d",palabra):
+        urlCliente=urlCliente.replace(palabra, "?")
+    return urlCliente
+
 
 
 @app.route("/login", methods=['POST'])
@@ -120,7 +132,47 @@ def eliminarUsuario(idUsuario):
 
 #fin rutas usuario
 ##############################################
-# permiso rol
+#inicio permiso
+
+@app.route("/permisos", methods=['GET'])
+def listarPermisos():
+    url = dataConfig['url-backend-registraduriasecurity'] + "/permisos"
+    headers = {"Content-Type": "application/json"}
+    response = requests.get(url, headers=headers)
+    return response.json()
+
+@app.route("/permisos", methods=['POST'])
+def crearPermisos():
+    url = dataConfig['url-backend-registraduriasecurity'] + "/permisos"
+    headers = {"Content-Type": "application/json"}
+    body = request.get_json()
+    response = requests.post(url, json=body, headers=headers)
+    return response.json()
+
+
+@app.route("/permisos/<string:idPermiso>", methods=['GET'])
+def buscarPermiso(idPermiso):
+    url = dataConfig['url-backend-registraduriasecurity'] + "/permisos"+idPermiso
+    headers = {"Content-Type": "application/json"}
+    response = requests.get(url, headers=headers)
+    return response.json()
+
+@app.route("/permisos/<string:idPermiso>", methods=['PUT'])
+def actualizarPermiso(idPermiso):
+    url = dataConfig['url-backend-registraduriasecurity'] + "/permisos"+idPermiso
+    headers = {"Content-Type": "application/json"}
+    body = request.get_json()
+    response = requests.put(url, json=body, headers=headers)
+    return response.json()
+@app.route("/permisos/<string:idPermiso>", methods=['DELETE'])
+def eliminarPermiso(idPermiso):
+    url = dataConfig['url-backend-registraduriasecurity'] + "/permisos"+idPermiso
+    headers = {"Content-Type": "application/json"}
+    response = requests.delete(url, headers=headers)
+    return response.json()
+#fin permiso
+##############################################
+# inicio permisorol
 @app.route("/permiso-rol/rol/{id_rol}/permiso/{id_permiso}", methods=['POST'])
 def crearPermisoRol(id_rol,id_permiso):
     url = dataConfig['url-backend-registraduriasecurity'] + "/permiso-rol/rol/" + id_rol +"/permiso/" + id_permiso
@@ -237,7 +289,47 @@ def eliminarPartido(id):
     response = requests.delete(url, headers=headers)
     return response.json()
 #Fin rutas Partido
+#=================================================================
 
+#inicio rutas Mesa
+
+@app.route("/mesa",methods=['GET'])
+def listaMesa():
+    url = dataConfig['url-backend-registraduria'] + "/mesa"
+    headers = {"Content-Type": "application/json"}
+    response = requests.get(url, headers=headers)
+    return response.json()
+
+@app.route("/mesa/<string:idMesa>",methods=['GET'])
+def consultaMesa(idMesa):
+    url = dataConfig['url-backend-registraduria'] + "/mesa"+idMesa
+    headers = {"Content-Type": "application/json"}
+    response = requests.get(url, headers=headers)
+    return response.json()
+
+@app.route("/mesa",methods=['POST'])
+def crearMesa():
+    url = dataConfig['url-backend-registraduria'] + "/mesa"
+    headers = {"Content-Type": "application/json"}
+    body = request.get_json()
+    response = requests.post(url, json=body, headers=headers)
+    return response.json()
+@app.route("/mesa/<string:idMesa>",methods=['PUT'])
+def actualizarMesa(idMesa):
+    url = dataConfig['url-backend-registraduria'] + "/mesa"+idMesa
+    headers = {"Content-Type": "application/json"}
+    body = request.get_json()
+    response = requests.put(url, json=body, headers=headers)
+    return response.json()
+
+@app.route("/mesa/<string:idMesa>",methods=['DELETE'])
+def eliminarMesa(idMesa):
+    url = dataConfig['url-backend-registraduria'] + "/mesa" + id
+    headers = {"Content-Type": "application/json"}
+    response = requests.delete(url, headers=headers)
+    return response.json()
+#fin rutas mesa
+#=================================================================
 def loadFileConfig():
     with open('config.json') as f:
          data = json.load(f)
