@@ -95,7 +95,7 @@ def listarUsuarios():
     return response.json()
 @app.route("/usuario/<string:idUsuario>", methods=['GET'])
 def buscarUsuario(idUsuario):
-    url = dataConfig['url-backend-registraduriasecurity'] + "/usuario"+idUsuario
+    url = dataConfig['url-backend-registraduriasecurity'] + "/usuario/"+idUsuario
     headers = {"Content-Type": "application/json"}
     response = requests.get(url, headers=headers)
     return response.json()
@@ -110,7 +110,7 @@ def crearUsuario():
 
 @app.route("/usuario/<string:idUsuario>", methods=['PUT'])
 def actualizarUsuario(idUsuario):
-    url = dataConfig['url-backend-registraduriasecurity'] + "/usuario"+idUsuario
+    url = dataConfig['url-backend-registraduriasecurity'] + "/usuario/"+idUsuario
     headers = {"Content-Type": "application/json"}
     body = request.get_json()
     response = requests.get(url, json=body, headers=headers)
@@ -118,14 +118,14 @@ def actualizarUsuario(idUsuario):
 
 @app.route("/usuario/<string:idUsuario>/rol/<string:idRol>", methods=['PUT'])
 def asignarRolAUsuario(idUsuario, idRol):
-    url = dataConfig['url-backend-registraduriasecurity'] + "/usuario"+idUsuario+"/rol/"+idRol
+    url = dataConfig['url-backend-registraduriasecurity'] + "/usuario/"+idUsuario+"/rol/"+idRol
     headers = {"Content-Type": "application/json"}
     body = request.get_json()
     response = requests.get(url, json=body, headers=headers)
     return response.json()
 @app.route("/usuario/<string:idUsuario>", methods=['DELETE'])
 def eliminarUsuario(idUsuario):
-    url = dataConfig['url-backend-registraduriasecurity'] + "/usuario" + idUsuario
+    url = dataConfig['url-backend-registraduriasecurity'] + "/usuario/" + idUsuario
     headers = {"Content-Type": "application/json"}
     response = requests.get(url, headers=headers)
     return response.json()
@@ -152,21 +152,21 @@ def crearPermisos():
 
 @app.route("/permisos/<string:idPermiso>", methods=['GET'])
 def buscarPermiso(idPermiso):
-    url = dataConfig['url-backend-registraduriasecurity'] + "/permisos"+idPermiso
+    url = dataConfig['url-backend-registraduriasecurity'] + "/permisos/"+idPermiso
     headers = {"Content-Type": "application/json"}
     response = requests.get(url, headers=headers)
     return response.json()
 
 @app.route("/permisos/<string:idPermiso>", methods=['PUT'])
 def actualizarPermiso(idPermiso):
-    url = dataConfig['url-backend-registraduriasecurity'] + "/permisos"+idPermiso
+    url = dataConfig['url-backend-registraduriasecurity'] + "/permisos/"+idPermiso
     headers = {"Content-Type": "application/json"}
     body = request.get_json()
     response = requests.put(url, json=body, headers=headers)
     return response.json()
 @app.route("/permisos/<string:idPermiso>", methods=['DELETE'])
 def eliminarPermiso(idPermiso):
-    url = dataConfig['url-backend-registraduriasecurity'] + "/permisos"+idPermiso
+    url = dataConfig['url-backend-registraduriasecurity'] + "/permisos/"+idPermiso
     headers = {"Content-Type": "application/json"}
     response = requests.delete(url, headers=headers)
     return response.json()
@@ -307,7 +307,7 @@ def listaPartido():
 
 @app.route("/partido/<string:id>",methods=['GET'])
 def consultaPartido(id):
-    url = dataConfig['url-backend-registraduria'] + "/partido" + id
+    url = dataConfig['url-backend-registraduria'] + "/partido/" + id
     headers = {"Content-Type": "application/json"}
     response = requests.get(url, headers=headers)
     return response.json()
@@ -315,7 +315,7 @@ def consultaPartido(id):
 
 @app.route("/partido/<string:id>",methods=['PUT'])
 def actualizarPartido(id):
-    url = dataConfig['url-backend-registraduria'] + "/partido"+ id
+    url = dataConfig['url-backend-registraduria'] + "/partido/"+ id
     headers = {"Content-Type": "application/json"}
     body = request.get_json()
     response = requests.put(url, json=body, headers=headers)
@@ -323,7 +323,7 @@ def actualizarPartido(id):
 
 @app.route("/partido/<string:id>",methods=['DELETE'])
 def eliminarPartido(id):
-    url = dataConfig['url-backend-registraduria'] + "/partido"+ id
+    url = dataConfig['url-backend-registraduria'] + "/partido/"+ id
     headers = {"Content-Type": "application/json"}
     response = requests.delete(url, headers=headers)
     return response.json()
@@ -339,14 +339,14 @@ def listaResultado():
 
 @app.route("/resultado/<string:id>",methods=['GET' ])
 def consultaResultado(id):
-    url = dataConfig['url-backend-registraduria'] + "/resultado" + id
+    url = dataConfig['url-backend-registraduria'] + "/resultado/" + id
     headers = {"Content-Type": "application/json"}
     response = requests.get(url, headers=headers)
     return response.json()
 
 @app.route("/resultado/candidato/<string:id_candidato>/mesa/<string:id_mesa>",methods=['POST'])
 def crearResultado(id_candidato,id_mesa):
-    url = dataConfig['url-backend-registraduria'] + "/resultado/candidato" + id_candidato + "/mesa/" + id_mesa
+    url = dataConfig['url-backend-registraduria'] + "/resultado/candidato/" + id_candidato + "/mesa/" + id_mesa
     headers = {"Content-Type": "application/json"}
     body= request.get_json()
     response = requests.post(url, json=body, headers=headers)
@@ -354,7 +354,7 @@ def crearResultado(id_candidato,id_mesa):
 
 @app.route("/resultado/<string:id>/candidato/<string:id_candidato>/mesa/<string:id_mesa>",methods=['PUT'])
 def actualizarResultado(id, id_candidato, id_mesa):
-    url = dataConfig['url-backend-registraduria'] + "/resultado" + id + "/candidato/" + id_candidato + "/mesa/" + id_mesa
+    url = dataConfig['url-backend-registraduria'] + "/resultado/" + id + "/candidato/" + id_candidato + "/mesa/" + id_mesa
     headers = {"Content-Type": "application/json"}
     body= request.get_json()
     response = requests.post(url, json=body, headers=headers)
@@ -362,7 +362,7 @@ def actualizarResultado(id, id_candidato, id_mesa):
 
 @app.route("/resultado/<string:id>",methods=['DELETE'])
 def eliminarResultado(id):
-    url = dataConfig['url-backend-registraduria'] + "/resultado"+ id
+    url = dataConfig['url-backend-registraduria'] + "/resultado/"+ id
     headers = {"Content-Type": "application/json"}
     response = requests.delete(url, headers=headers)
     return response.json()
@@ -379,7 +379,7 @@ def listaMesa():
 
 @app.route("/mesa/<string:idMesa>",methods=['GET'])
 def consultaMesa(idMesa):
-    url = dataConfig['url-backend-registraduria'] + "/mesa"+idMesa
+    url = dataConfig['url-backend-registraduria'] + "/mesa/"+idMesa
     headers = {"Content-Type": "application/json"}
     response = requests.get(url, headers=headers)
     return response.json()
@@ -393,7 +393,7 @@ def crearMesa():
     return response.json()
 @app.route("/mesa/<string:idMesa>",methods=['PUT'])
 def actualizarMesa(idMesa):
-    url = dataConfig['url-backend-registraduria'] + "/mesa"+idMesa
+    url = dataConfig['url-backend-registraduria'] + "/mesa/"+idMesa
     headers = {"Content-Type": "application/json"}
     body = request.get_json()
     response = requests.put(url, json=body, headers=headers)
@@ -401,7 +401,7 @@ def actualizarMesa(idMesa):
 
 @app.route("/mesa/<string:idMesa>",methods=['DELETE'])
 def eliminarMesa(idMesa):
-    url = dataConfig['url-backend-registraduria'] + "/mesa" + id
+    url = dataConfig['url-backend-registraduria'] + "/mesa/" + id
     headers = {"Content-Type": "application/json"}
     response = requests.delete(url, headers=headers)
     return response.json()
