@@ -30,9 +30,8 @@ def middleware():
     if (urlCliente == "/login"):
         print("la url es /login, no valido")
         pass
-    else:
+    elif verify_jwt_in_request():
         print("aqui se valida token")
-        verify_jwt_in_request()
         # para validar los rol
         infoToken = get_jwt_identity()
         idRol = infoToken["rol"]["_id"]
